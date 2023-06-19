@@ -44,7 +44,7 @@ function getWeatherData() {
 function showWeatherData(data) {
     let { humidity, pressure, sunrise, sunset, wind_speed } = data.current;
 
-    timezone.innerHTML = data.timezone;
+    timezoneEl.innerHTML = data.timezone;
     countryEl.innerHTML = data.lat + 'N ' + data.lon + 'E';
 
     currentWeatherItemsEl.innerHTML =
