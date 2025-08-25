@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Forecast App</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -13,123 +13,196 @@
 </head>
 
 <body>
-    <div class="app-container" id="app-container">
-        <!-- Background overlay -->
-        <div class="background-overlay"></div>
-
-        <!-- Main content -->
-        <div class="main-content">
-            <!-- Header Section -->
-            <header class="header">
-                <div class="location-info">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <span id="location-name">New York</span>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-                <div class="user-avatar">
-                    <img src="https://via.placeholder.com/40" alt="User" id="user-avatar">
-                </div>
-            </header>
-
-            <!-- Weather Alert -->
-            <div class="weather-alert" id="weather-alert" style="display: none;">
-                <i class="fas fa-sun"></i>
-                <span id="alert-text">No more rain in half an hour. Grab your umbrella and get ready to explore the
-                    city!</span>
-            </div>
-
-            <!-- Current Weather -->
-            <div class="current-weather">
-                <div class="weather-condition" id="weather-condition">Rainy</div>
-                <div class="weather-icon-container">
-                    <img src="" alt="Weather Icon" id="main-weather-icon" class="main-weather-icon">
-                </div>
-                <div class="temperature" id="current-temp">16°C</div>
-                <div class="date-time">
-                    <span id="current-date">Sunday | 19 Dec 2023</span>
-                </div>
-            </div>
-
-            <!-- Weekly Forecast -->
-            <div class="weekly-forecast">
-                <div class="forecast-days" id="forecast-days">
-                    <!-- Forecast items will be populated by JavaScript -->
-                </div>
-            </div>
-
-            <!-- 24-hour Forecast -->
-            <div class="hourly-forecast">
-                <div class="forecast-header">
-                    <i class="fas fa-clock"></i>
-                    <span>24-hour forecast</span>
-                </div>
-                <div class="hourly-chart" id="hourly-chart">
-                    <!-- Hourly forecast will be populated by JavaScript -->
-                </div>
-                <button class="forecast-button" onclick="toggleExtendedForecast()">
-                    5-day forecast
-                </button>
-            </div>
-        </div>
-
-        <!-- Side Panel (for desktop) -->
-        <div class="side-panel" id="side-panel">
-            <div class="time-display">
-                <div id="current-time">8:00PM GMT</div>
-            </div>
-
-            <div class="air-conditions">
-                <h3>AIR CONDITIONS</h3>
-                <div class="condition-item">
-                    <i class="fas fa-thermometer-half"></i>
-                    <div>
-                        <span>Real Feel</span>
-                        <span id="feels-like">30°</span>
-                    </div>
-                </div>
-                <div class="condition-item">
-                    <i class="fas fa-wind"></i>
-                    <div>
-                        <span>Wind</span>
-                        <span id="wind-speed">0.8 km/hr</span>
-                    </div>
-                </div>
-                <div class="condition-item">
-                    <i class="fas fa-tint"></i>
-                    <div>
-                        <span>Chance of rain</span>
-                        <span id="rain-chance">2%</span>
-                    </div>
-                </div>
-                <div class="condition-item">
-                    <i class="fas fa-sun"></i>
-                    <div>
-                        <span>UV Index</span>
-                        <span id="uv-index">4</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Loading Screen -->
-        <div class="loading-screen" id="loading-screen">
-            <div class="loading-spinner"></div>
-            <p>Getting your weather...</p>
-        </div>
-
-        <!-- Search Modal -->
-        <div class="search-modal" id="search-modal">
-            <div class="search-content">
-                <div class="search-header">
-                    <input type="text" id="search-input" placeholder="Search for a city...">
-                    <button id="search-close"><i class="fas fa-times"></i></button>
-                </div>
-                <div class="search-results" id="search-results"></div>
-            </div>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner">
+            <i class="fas fa-sun loading-icon"></i>
+            <p>Getting weather data...</p>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Main Container -->
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="location-container">
+                <i class="fas fa-map-marker-alt location-icon"></i>
+                <div class="location-info">
+                    <h1 id="city-name" class="city-name">Loading...</h1>
+                    <button id="change-location" class="change-location-btn">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="profile-container">
+                <img id="profile-pic" class="profile-pic"
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face"
+                    alt="Profile">
+            </div>
+        </header>
+
+        <!-- Location Search Modal -->
+        <div id="location-modal" class="location-modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Change Location</h3>
+                    <button id="close-modal" class="close-btn">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="search-container">
+                    <input type="text" id="location-search" placeholder="Search for a city..." class="search-input">
+                    <button id="search-btn" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <div id="search-results" class="search-results"></div>
+            </div>
+        </div>
+
+        <!-- Weather Notification -->
+        <div id="weather-notification" class="weather-notification hidden">
+            <div class="notification-content">
+                <i class="notification-icon"></i>
+                <div class="notification-text">
+                    <p class="notification-title"></p>
+                    <p class="notification-message"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Weather -->
+        <main class="main-content">
+            <div class="current-weather">
+                <div class="weather-condition" id="weather-condition">Loading...</div>
+                <div class="weather-icon-container">
+                    <div class="weather-icon" id="weather-icon">
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="weather-effects" id="weather-effects"></div>
+                </div>
+                <div class="temperature-container">
+                    <span class="temperature" id="current-temp">--</span>
+                    <span class="temperature-unit">°C</span>
+                </div>
+                <div class="date-time">
+                    <p id="current-date" class="current-date">Loading...</p>
+                    <p id="current-time" class="current-time">--:--</p>
+                </div>
+            </div>
+
+            <!-- 5-Day Forecast -->
+            <section class="forecast-section">
+                <div class="forecast-header">
+                    <h2>5-Day Forecast</h2>
+                    <div class="forecast-toggle">
+                        <button class="toggle-btn active" data-view="5day">
+                            <i class="fas fa-calendar-week"></i>
+                        </button>
+                        <button class="toggle-btn" data-view="hourly">
+                            <i class="fas fa-clock"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="forecast-container" class="forecast-container">
+                    <!-- 5-day forecast items will be populated here -->
+                </div>
+            </section>
+
+            <!-- Hourly Forecast (Initially Hidden) -->
+            <section id="hourly-forecast" class="hourly-forecast hidden">
+                <div class="hourly-container" id="hourly-container">
+                    <!-- Hourly forecast items will be populated here -->
+                </div>
+            </section>
+
+            <!-- Weather Details -->
+            <section class="weather-details">
+                <h3>Weather Details</h3>
+                <div class="details-grid" id="weather-details-grid">
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-thermometer-half"></i>
+                        </div>
+                        <div class="detail-info">
+                            <span class="detail-label">Real Feel</span>
+                            <span class="detail-value" id="feels-like">--°</span>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon wind-icon">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div class="detail-info">
+                            <span class="detail-label">Wind</span>
+                            <span class="detail-value" id="wind-speed">-- km/h</span>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div class="detail-info">
+                            <span class="detail-label">Chance of rain</span>
+                            <span class="detail-value" id="humidity">--%</span>
+                        </div>
+                    </div>
+                    <div class="detail-card">
+                        <div class="detail-icon">
+                            <i class="fas fa-sun"></i>
+                        </div>
+                        <div class="detail-info">
+                            <span class="detail-label">UV Index</span>
+                            <span class="detail-value" id="uv-index">--</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Activities Section -->
+            <section class="activities-section">
+                <div class="activities-header">
+                    <h3><i class="fas fa-heart"></i> Activities in your area</h3>
+                </div>
+                <div class="activities-grid" id="activities-grid">
+                    <!-- Activity cards will be populated here -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="error-modal" class="error-modal hidden">
+        <div class="error-content">
+            <div class="error-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Oops! Something went wrong</h3>
+            <p id="error-message">Unable to fetch weather data</p>
+            <button id="retry-btn" class="retry-btn">Try Again</button>
+        </div>
+    </div>
+
+    
+    <script>
+        // Put your entire CONFIG object here
+        const CONFIG = {
+            API_KEYS: {
+                OPENWEATHERMAP: "6432b1f236f8fa1c0c6d742cab46ed41",
+                UNSPLASH: "bn9FqstnBj9bL2n_ZnO8uiIr7fpTUgJCDrKNag2Giys",
+            },
+            // ... rest of your config
+        };
+
+        // Make it globally available
+        window.CONFIG = CONFIG;
+    </script>
+
+    <!-- Scripts - IMPORTANT: Load in correct order -->
+    <script src="js/config.js"></script>
+    <script src="js/weatherAPI.js"></script>
+    <script src="js/uiController.js"></script>
+    <script src="js/app.js"></script>
 </body>
 
 </html>
