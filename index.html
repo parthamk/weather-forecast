@@ -1,87 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast App</title>
     <link rel="stylesheet" href="style.css">
-    <title>Weather App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
-    
-    <div class="container">
-        <div class="current-info">
+    <div class="app-container" id="app-container">
+        <!-- Background overlay -->
+        <div class="background-overlay"></div>
 
-            <div class="date-container">
-                <div class="time" id="time">
-                    12:30 <span id="am-pm">PM</span>
+        <!-- Main content -->
+        <div class="main-content">
+            <!-- Header Section -->
+            <header class="header">
+                <div class="location-info">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="location-name">New York</span>
+                    <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="date" id="date">
-                    Monday, 25 May
+                <div class="user-avatar">
+                    <img src="https://via.placeholder.com/40" alt="User" id="user-avatar">
                 </div>
+            </header>
 
-                <div class="others" id="current-weather-items">
-                    
-                    
+            <!-- Weather Alert -->
+            <div class="weather-alert" id="weather-alert" style="display: none;">
+                <i class="fas fa-sun"></i>
+                <span id="alert-text">No more rain in half an hour. Grab your umbrella and get ready to explore the
+                    city!</span>
+            </div>
+
+            <!-- Current Weather -->
+            <div class="current-weather">
+                <div class="weather-condition" id="weather-condition">Rainy</div>
+                <div class="weather-icon-container">
+                    <img src="" alt="Weather Icon" id="main-weather-icon" class="main-weather-icon">
+                </div>
+                <div class="temperature" id="current-temp">16°C</div>
+                <div class="date-time">
+                    <span id="current-date">Sunday | 19 Dec 2023</span>
                 </div>
             </div>
 
-            <div class="place-container">
-                <div class="time-zone" id="time-zone">Asia/Kolkata</div>
-                <div id="country" class="country">IN</div>
+            <!-- Weekly Forecast -->
+            <div class="weekly-forecast">
+                <div class="forecast-days" id="forecast-days">
+                    <!-- Forecast items will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- 24-hour Forecast -->
+            <div class="hourly-forecast">
+                <div class="forecast-header">
+                    <i class="fas fa-clock"></i>
+                    <span>24-hour forecast</span>
+                </div>
+                <div class="hourly-chart" id="hourly-chart">
+                    <!-- Hourly forecast will be populated by JavaScript -->
+                </div>
+                <button class="forecast-button" onclick="toggleExtendedForecast()">
+                    5-day forecast
+                </button>
             </div>
         </div>
 
-        
+        <!-- Side Panel (for desktop) -->
+        <div class="side-panel" id="side-panel">
+            <div class="time-display">
+                <div id="current-time">8:00PM GMT</div>
+            </div>
+
+            <div class="air-conditions">
+                <h3>AIR CONDITIONS</h3>
+                <div class="condition-item">
+                    <i class="fas fa-thermometer-half"></i>
+                    <div>
+                        <span>Real Feel</span>
+                        <span id="feels-like">30°</span>
+                    </div>
+                </div>
+                <div class="condition-item">
+                    <i class="fas fa-wind"></i>
+                    <div>
+                        <span>Wind</span>
+                        <span id="wind-speed">0.8 km/hr</span>
+                    </div>
+                </div>
+                <div class="condition-item">
+                    <i class="fas fa-tint"></i>
+                    <div>
+                        <span>Chance of rain</span>
+                        <span id="rain-chance">2%</span>
+                    </div>
+                </div>
+                <div class="condition-item">
+                    <i class="fas fa-sun"></i>
+                    <div>
+                        <span>UV Index</span>
+                        <span id="uv-index">4</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loading-screen">
+            <div class="loading-spinner"></div>
+            <p>Getting your weather...</p>
+        </div>
+
+        <!-- Search Modal -->
+        <div class="search-modal" id="search-modal">
+            <div class="search-content">
+                <div class="search-header">
+                    <input type="text" id="search-input" placeholder="Search for a city...">
+                    <button id="search-close"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="search-results" id="search-results"></div>
+            </div>
+        </div>
     </div>
 
-    <div class="future-forecast">
-        <div class="today" id="current-temp">
-            <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather icon" class="w-icon">
-            <div class="other">
-                <div class="day">Monday</div>
-                <div class="temp">Night - 25.6&#176; C</div>
-                <div class="temp">Day - 35.6&#176; C</div>
-            </div>
-        </div>
-
-        <div class="weather-forecast" id="weather-forecast">
-            <div class="weather-forecast-item">
-                <div class="day">Tue</div>
-                <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather icon" class="w-icon">
-                <div class="temp">Night - 25.6&#176; C</div>
-                <div class="temp">Day - 35.6&#176; C</div>
-            </div>
-            <div class="weather-forecast-item">
-                <div class="day">Wed</div>
-                <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather icon" class="w-icon">
-                <div class="temp">Night - 25.6&#176; C</div>
-                <div class="temp">Day - 35.6&#176; C</div>
-            </div>
-            <div class="weather-forecast-item">
-                <div class="day">Thur</div>
-                <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather icon" class="w-icon">
-                <div class="temp">Night - 25.6&#176; C</div>
-                <div class="temp">Day - 35.6&#176; C</div>
-            </div>
-            <div class="weather-forecast-item">
-                <div class="day">Fri</div>
-                <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather icon" class="w-icon">
-                <div class="temp">Night - 25.6&#176; C</div>
-                <div class="temp">Day - 35.6&#176; C</div>
-            </div>
-            <div class="weather-forecast-item">
-                <div class="day">Sat</div>
-                <img src="http://openweathermap.org/img/wn/10d@2x.png" alt="weather icon" class="w-icon">
-                <div class="temp">Night - 25.6&#176; C</div>
-                <div class="temp">Day - 35.6&#176; C</div>
-            </div>
-
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
     <script src="script.js"></script>
 </body>
+
 </html>
