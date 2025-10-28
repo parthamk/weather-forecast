@@ -1,208 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Forecast App</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Weather Forecast - Real-time Weather Display</title>
+    <link rel="stylesheet" href="./css/style.css">
 </head>
-
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen" class="loading-screen">
-        <div class="loading-spinner">
-            <i class="fas fa-sun loading-icon"></i>
-            <p>Getting weather data...</p>
+    <!-- API Key Notice -->
+    <div id="api-notice" class="api-notice">
+        <div class="api-notice-content">
+            <h3>⚠️ API Key Required</h3>
+            <p>Please add your OpenWeatherMap API key in the app.js file to use this application.</p>
+            <p>Get a free API key at: <a href="https://openweathermap.org/api" target="_blank">openweathermap.org/api</a></p>
+            <button onclick="document.getElementById('api-notice').style.display='none'" class="btn-close">Close</button>
         </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading" class="loading-overlay">
+        <div class="loader"></div>
+        <p>Loading weather data...</p>
     </div>
 
     <!-- Main Container -->
-    <div id="app" class="app-container">
-        <!-- Header -->
+    <div class="container">
+        <!-- Header Section -->
         <header class="header">
-            <div class="location-container">
-                <i class="fas fa-map-marker-alt location-icon"></i>
-                <div class="location-info">
-                    <h1 id="city-name" class="city-name">Loading...</h1>
-                    <button id="change-location" class="change-location-btn">
-                        <i class="fas fa-chevron-down"></i>
-                    </button>
+            <div class="header-content">
+                <h1 class="app-title">🌤️ Weather Forecast</h1>
+                <div class="header-info">
+                    <p id="current-date" class="current-date"></p>
                 </div>
             </div>
-            <div class="profile-container">
-                <img id="profile-pic" class="profile-pic"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=60&h=60&fit=crop&crop=face"
-                    alt="Profile">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    id="city-input" 
+                    class="search-input" 
+                    placeholder="Search for a city..."
+                    autocomplete="off"
+                >
+                <button id="search-btn" class="search-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
             </div>
         </header>
 
-        <!-- Location Search Modal -->
-        <div id="location-modal" class="location-modal hidden">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>Change Location</h3>
-                    <button id="close-modal" class="close-btn">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="search-container">
-                    <input type="text" id="location-search" placeholder="Search for a city..." class="search-input">
-                    <button id="search-btn" class="search-btn">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-                <div id="search-results" class="search-results"></div>
-            </div>
+        <!-- Error Message -->
+        <div id="error-message" class="error-message" style="display: none;">
+            <p></p>
         </div>
 
-        <!-- Weather Notification -->
-        <div id="weather-notification" class="weather-notification hidden">
-            <div class="notification-content">
-                <i class="notification-icon"></i>
-                <div class="notification-text">
-                    <p class="notification-title"></p>
-                    <p class="notification-message"></p>
+        <!-- Main Weather Card -->
+        <section id="main-weather" class="main-weather">
+            <div class="weather-main-content">
+                <div class="location-info">
+                    <h2 id="city-name" class="city-name">--</h2>
+                    <p id="weather-description" class="weather-description">--</p>
+                </div>
+                <div class="temperature-display">
+                    <div class="temp-main">
+                        <span id="temperature" class="temperature">--</span>
+                        <span class="temp-unit">°C</span>
+                    </div>
+                    <div id="weather-icon" class="weather-icon">☀️</div>
                 </div>
             </div>
-        </div>
-
-        <!-- Current Weather -->
-        <main class="main-content">
-            <div class="current-weather">
-                <div class="weather-condition" id="weather-condition">Loading...</div>
-                <div class="weather-icon-container">
-                    <div class="weather-icon" id="weather-icon">
-                        <i class="fas fa-sun"></i>
+            
+            <div class="weather-details-grid">
+                <div class="detail-card">
+                    <div class="detail-icon">🌡️</div>
+                    <div class="detail-info">
+                        <p class="detail-label">Feels Like</p>
+                        <p id="feels-like" class="detail-value">--°C</p>
                     </div>
-                    <div class="weather-effects" id="weather-effects"></div>
                 </div>
-                <div class="temperature-container">
-                    <span class="temperature" id="current-temp">--</span>
-                    <span class="temperature-unit">°C</span>
+                <div class="detail-card">
+                    <div class="detail-icon">💧</div>
+                    <div class="detail-info">
+                        <p class="detail-label">Humidity</p>
+                        <p id="humidity" class="detail-value">--%</p>
+                    </div>
                 </div>
-                <div class="date-time">
-                    <p id="current-date" class="current-date">Loading...</p>
-                    <p id="current-time" class="current-time">--:--</p>
+                <div class="detail-card">
+                    <div class="detail-icon">💨</div>
+                    <div class="detail-info">
+                        <p class="detail-label">Wind Speed</p>
+                        <p id="wind-speed" class="detail-value">-- m/s</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">🔽</div>
+                    <div class="detail-info">
+                        <p class="detail-label">Pressure</p>
+                        <p id="pressure" class="detail-value">-- hPa</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">👁️</div>
+                    <div class="detail-info">
+                        <p class="detail-label">Visibility</p>
+                        <p id="visibility" class="detail-value">-- km</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">🌅</div>
+                    <div class="detail-info">
+                        <p class="detail-label">Sunrise</p>
+                        <p id="sunrise" class="detail-value">--:--</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">🌇</div>
+                    <div class="detail-info">
+                        <p class="detail-label">Sunset</p>
+                        <p id="sunset" class="detail-value">--:--</p>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <div class="detail-icon">☁️</div>
+                    <div class="detail-info">
+                        <p class="detail-label">Cloudiness</p>
+                        <p id="cloudiness" class="detail-value">--%</p>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <!-- 5-Day Forecast -->
-            <section class="forecast-section">
-                <div class="forecast-header">
-                    <h2>5-Day Forecast</h2>
-                    <div class="forecast-toggle">
-                        <button class="toggle-btn active" data-view="5day">
-                            <i class="fas fa-calendar-week"></i>
-                        </button>
-                        <button class="toggle-btn" data-view="hourly">
-                            <i class="fas fa-clock"></i>
-                        </button>
-                    </div>
-                </div>
-                <div id="forecast-container" class="forecast-container">
-                    <!-- 5-day forecast items will be populated here -->
-                </div>
-            </section>
+        <!-- Hourly Forecast Section -->
+        <section class="hourly-section">
+            <h3 class="section-title">Hourly Forecast</h3>
+            <div id="hourly-forecast" class="hourly-forecast">
+                <!-- Hourly cards will be inserted here -->
+            </div>
+        </section>
 
-            <!-- Hourly Forecast (Initially Hidden) -->
-            <section id="hourly-forecast" class="hourly-forecast hidden">
-                <div class="hourly-container" id="hourly-container">
-                    <!-- Hourly forecast items will be populated here -->
-                </div>
-            </section>
-
-            <!-- Weather Details -->
-            <section class="weather-details">
-                <h3>Weather Details</h3>
-                <div class="details-grid" id="weather-details-grid">
-                    <div class="detail-card">
-                        <div class="detail-icon">
-                            <i class="fas fa-thermometer-half"></i>
-                        </div>
-                        <div class="detail-info">
-                            <span class="detail-label">Real Feel</span>
-                            <span class="detail-value" id="feels-like">--°</span>
-                        </div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-icon wind-icon">
-                            <i class="fas fa-wind"></i>
-                        </div>
-                        <div class="detail-info">
-                            <span class="detail-label">Wind</span>
-                            <span class="detail-value" id="wind-speed">-- km/h</span>
-                        </div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-icon">
-                            <i class="fas fa-tint"></i>
-                        </div>
-                        <div class="detail-info">
-                            <span class="detail-label">Chance of rain</span>
-                            <span class="detail-value" id="humidity">--%</span>
-                        </div>
-                    </div>
-                    <div class="detail-card">
-                        <div class="detail-icon">
-                            <i class="fas fa-sun"></i>
-                        </div>
-                        <div class="detail-info">
-                            <span class="detail-label">UV Index</span>
-                            <span class="detail-value" id="uv-index">--</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Activities Section -->
-            <section class="activities-section">
-                <div class="activities-header">
-                    <h3><i class="fas fa-heart"></i> Activities in your area</h3>
-                </div>
-                <div class="activities-grid" id="activities-grid">
-                    <!-- Activity cards will be populated here -->
-                </div>
-            </section>
-        </main>
+        <!-- 5-Day Forecast Section -->
+        <section class="forecast-section">
+            <h3 class="section-title">5-Day Forecast</h3>
+            <div id="daily-forecast" class="daily-forecast">
+                <!-- Daily forecast cards will be inserted here -->
+            </div>
+        </section>
     </div>
 
-    <!-- Error Modal -->
-    <div id="error-modal" class="error-modal hidden">
-        <div class="error-content">
-            <div class="error-icon">
-                <i class="fas fa-exclamation-triangle"></i>
-            </div>
-            <h3>Oops! Something went wrong</h3>
-            <p id="error-message">Unable to fetch weather data</p>
-            <button id="retry-btn" class="retry-btn">Try Again</button>
-        </div>
-    </div>
-
-    
-    <script>
-        // Put your entire CONFIG object here
-        const CONFIG = {
-            API_KEYS: {
-                OPENWEATHERMAP: "6432b1f236f8fa1c0c6d742cab46ed41",
-                UNSPLASH: "bn9FqstnBj9bL2n_ZnO8uiIr7fpTUgJCDrKNag2Giys",
-            },
-            // ... rest of your config
-        };
-
-        // Make it globally available
-        window.CONFIG = CONFIG;
-    </script>
-
-    <!-- Scripts - IMPORTANT: Load in correct order -->
-    <script src="js/config.js"></script>
-    <script src="js/weatherAPI.js"></script>
-    <script src="js/uiController.js"></script>
-    <script src="js/app.js"></script>
+    <script src="./js/app.js"></script>
 </body>
-
 </html>
