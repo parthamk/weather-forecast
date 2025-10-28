@@ -1063,7 +1063,7 @@ body {
 }
 
 .search-btn {
-  padding: var(--space-12) var(--space-24);
+  padding: var(--space-12) var(--space-16);
   background: var(--color-white);
   border: none;
   border-radius: var(--radius-lg);
