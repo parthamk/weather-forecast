@@ -1077,7 +1077,7 @@ body {
   display: flex;
   gap: var(--space-8);
   width: 100%;
-  max-width: 500px;
+  max-width: 450px;
 }
 
 .search-input {
